@@ -1,0 +1,21 @@
+# SECRETS - kabhi GitHub par nahi jana chahiye
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local data (apne PC ka cache / stats)
+cache.json
+results_cache.json
+stats.json
+
+# Faltu
+py
+*.log
+.DS_Store
+Thumbs.db
