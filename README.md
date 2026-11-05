@@ -18,7 +18,7 @@ All three members contributed equally.
 
 | Name | Role |
 |---|---|
-| Yogesh Mondhe | Team leader |
+| Yogesh Mondhe | Team Leader |
 | Khushi Wanjari | Team Member |
 | Ayush Kakulte | Team Member |
 
