@@ -1,6 +1,7 @@
 import os, hashlib, urllib.request, urllib.error
+from typing import Any
 from fastapi import FastAPI, HTTPException, Body
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel
 
 from config import (
@@ -10,6 +11,8 @@ from config import (
 from verifier import (
     check_answer, fix_answer, fact_history, compare_models, summarize, load_stats, ANSWER_SYSTEM,
 )
+
+from mcp_server import handle_rpc
 
 app = FastAPI(title="FreshCheck")
 
@@ -223,6 +226,31 @@ def sidecar_chat(body: dict = Body(...)):
     except Exception:
         headers = {"x-freshcheck-status": "error"}
     return JSONResponse(content=data, headers=headers)
+
+
+# ---------------------------------------------------------------------------
+# MCP endpoint: lets the Bifrost MCP Gateway use FreshCheck as a tool server.
+# Tool: check_freshness(text). Add http://127.0.0.1:8000/mcp as an MCP server in Bifrost.
+# ---------------------------------------------------------------------------
+def _mcp_check(text):
+    return fc_payload(serve("check", text, ask=False))
+
+
+@app.post("/mcp")
+def mcp_endpoint(body: Any = Body(...)):
+    if isinstance(body, list):                       # JSON-RPC batch (older protocol revisions)
+        out = [r for r in (handle_rpc(m, _mcp_check) for m in body) if r is not None]
+        return JSONResponse(content=out) if out else Response(status_code=202)
+    resp = handle_rpc(body, _mcp_check)
+    if resp is None:                                 # notification: accepted, no body
+        return Response(status_code=202)
+    return JSONResponse(content=resp)
+
+
+@app.get("/mcp")
+def mcp_no_stream():
+    # We do not offer a server-to-client SSE stream; the spec allows answering 405.
+    return Response(status_code=405, headers={"Allow": "POST"})
 
 
 if __name__ == "__main__":
