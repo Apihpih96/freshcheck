@@ -4,6 +4,8 @@ FreshCheck is a local web prototype that uses an LLM to find potentially time-se
 
 The repository includes a FastAPI web app, an optional OpenAI-compatible sidecar endpoint, and an MCP endpoint. The LLM can use Groq directly (the code default) or a Bifrost instance configured in `.env`.
 
+> This README documents the `docs/truthful-readme` submission branch. The repository default branch is `main`; use the branch named in the clone command below for the reviewed submission code.
+
 ## Hackathon scope
 
 The relevant Tavily problem statement is **“Build a Stale-Answer Detector for AI Applications.”** This repository explores that workflow, but its model-generated verdicts and score are not a reliable freshness or truth guarantee.
@@ -61,7 +63,7 @@ When configured, the sidecar forwards requests to the selected LLM endpoint and 
 ### Install
 
 ```sh
-git clone https://github.com/yogeshx21/freshcheck.git
+git clone --branch docs/truthful-readme https://github.com/Apihpih96/freshcheck.git
 cd freshcheck
 python -m venv .venv
 # Windows: .venv\Scripts\activate
@@ -171,3 +173,7 @@ Team Visionaries:
 - Ayush Kakulte — Team Member
 
 Built for the Global AI Hackathon. This README describes the repository code and its limitations; it does not claim that the entry was submitted or accepted.
+
+## Repository provenance and licensing
+
+This repository is a fork of [yogeshx21/freshcheck](https://github.com/yogeshx21/freshcheck). GitHub currently lists no license for either the fork or its upstream repository. Reuse and redistribution terms therefore remain unresolved; this README does not claim a license. Confirm the applicable permissions with the upstream maintainers before adding or representing a license.
